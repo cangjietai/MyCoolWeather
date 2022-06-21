@@ -49,7 +49,7 @@ public class Utility {
      * @return
      */
     public static boolean handleCityResponse(String response,int provinceId) {
-        if (!response.isEmpty()) {
+        if (!TextUtils.isEmpty(response)) {
             try {
                 JSONArray allCities = new JSONArray(response);
                 for (int i = 0; i < allCities.length(); i++) {
@@ -69,10 +69,10 @@ public class Utility {
     }
 
     /**
-     * 解析和处理服务器返回的市级数据
+     * 解析和处理服务器返回的县级数据
      */
     public static boolean handleCountyResponse(String response,int cityId) {
-        if (!response.isEmpty()) {
+        if (!TextUtils.isEmpty(response)) {
             try {
                 JSONArray allCounties = new JSONArray(response);
                 for (int i = 0; i < allCounties.length(); i++) {
@@ -81,11 +81,13 @@ public class Utility {
                     county.setCountyName(countyObject.getString("name"));
                     county.setWeatherId(countyObject.getString("weather_id"));
                     county.setCityId(cityId);
+                    county.save();
                 }
+                return true;
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            return true;
+//            return true;
         }
         return false;
     }

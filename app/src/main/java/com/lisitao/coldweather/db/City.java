@@ -1,5 +1,6 @@
 package com.lisitao.coldweather.db;
 
+import org.litepal.LitePal;
 import org.litepal.crud.DataSupport;
 
 /**

@@ -1,6 +1,7 @@
 package com.lisitao.coldweather.util;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.lisitao.coldweather.db.City;
 import com.lisitao.coldweather.db.County;
@@ -16,6 +17,8 @@ import org.json.JSONObject;
  */
 public class Utility {
 
+    public static final String TAG = Utility.class.getName();
+
     /**
      * 解析和处理服务器返回的省级数据
      * @param response
@@ -27,6 +30,7 @@ public class Utility {
                 JSONArray allProvince = new JSONArray(response);
                 for (int i = 0; i < allProvince.length(); i++) {
                     JSONObject provinceObject = allProvince.getJSONObject(i);
+                    Log.d(TAG,"provinceObject: " + provinceObject);
                     Province province = new Province();
                     province.setProvinceName(provinceObject.getString("name"));
                     province.setProvinceCode(provinceObject.getInt("id"));
@@ -54,9 +58,11 @@ public class Utility {
                 JSONArray allCities = new JSONArray(response);
                 for (int i = 0; i < allCities.length(); i++) {
                     JSONObject cityObject = allCities.getJSONObject(i);
+                    Log.d(TAG,"cityObject: "+cityObject);
                     City city = new City();
                     city.setCityName(cityObject.getString("name"));
-                    city.setId(cityObject.getInt("id"));
+                    city.setCityCode(cityObject.getInt("id"));
+                    Log.d(TAG,"cityObject id: "+cityObject.getInt("id"));
                     city.setProvinceId(provinceId);
                     city.save();
                 }
@@ -77,6 +83,7 @@ public class Utility {
                 JSONArray allCounties = new JSONArray(response);
                 for (int i = 0; i < allCounties.length(); i++) {
                     JSONObject countyObject = allCounties.getJSONObject(i);
+                    Log.d(TAG,"countyObject: " + countyObject);
                     County county = new County();
                     county.setCountyName(countyObject.getString("name"));
                     county.setWeatherId(countyObject.getString("weather_id"));
@@ -87,7 +94,6 @@ public class Utility {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-//            return true;
         }
         return false;
     }

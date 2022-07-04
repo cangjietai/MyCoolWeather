@@ -101,6 +101,8 @@ public class ChooseAreaFragment extends Fragment {
     }
 
 
+
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -109,9 +111,11 @@ public class ChooseAreaFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (currentLevel == LEVEL_PROVINCE) {
                     selectedProvince = provinceList.get(position);
+                    Log.d(TAG,"result selectedProvince: "+selectedProvince);
                     queryCities();
                 } else if (currentLevel == LEVEL_CITY) {
                     selectedCity = cityList.get(position);
+                    Log.d(TAG,"result selectedCity: "+selectedCity);
                     queryCounties();
                 }
             }
@@ -138,6 +142,7 @@ public class ChooseAreaFragment extends Fragment {
         backButton.setVisibility(View.GONE);
         // 先从数据库中查
         provinceList = DataSupport.findAll(Province.class);
+        Log.d(TAG,"result provinceList: " +provinceList);
         if (provinceList.size() > 0) {
             dataList.clear();
             for (Province province : provinceList) {
@@ -159,7 +164,8 @@ public class ChooseAreaFragment extends Fragment {
     private void queryCities() {
         titleText.setText(selectedProvince.getProvinceName());
         backButton.setVisibility(View.VISIBLE);
-        cityList = DataSupport.where("provinceid = ?",String.valueOf(selectedProvince.getId())).find(City.class);
+        cityList = DataSupport.where("provinceId = ?",String.valueOf(selectedProvince.getId())).find(City.class);
+        Log.d(TAG,"result cityList: " +cityList);
         if (cityList.size() > 0) {
             dataList.clear();
             for (City city : cityList) {
@@ -182,8 +188,8 @@ public class ChooseAreaFragment extends Fragment {
     private void queryCounties() {
         titleText.setText(selectedCity.getCityName());
         backButton.setVisibility(View.VISIBLE);
-        countyList = DataSupport.where("cityid = ?",String.valueOf(selectedCity.getId())).find(County.class);
-        Log.d(TAG,"result countyList: " +countyList);
+        countyList = DataSupport.where("cityId = ?",String.valueOf(selectedCity.getId())).find(County.class);
+        Log.d(TAG,"result countyList.size: " + DataSupport.where("cityId = ?",String.valueOf(selectedCity.getId())).find(County.class));
         if (countyList.size() > 0) {
             dataList.clear();
             for (County county : countyList) {
@@ -192,12 +198,15 @@ public class ChooseAreaFragment extends Fragment {
             adapter.notifyDataSetChanged();
             listView.setSelection(0);
             currentLevel = LEVEL_COUNTY;
+            Log.d(TAG,"数据库 currentLevel: " +currentLevel);
         } else {
             int provinceCode = selectedProvince.getProvinceCode();
+//            selectedCity.setCityCode(10);
             int cityCode = selectedCity.getCityCode();
+            Log.d(TAG,"服务器 result cityCode: "+cityCode + " selectedCity:" + selectedCity + " selectedProvince" + selectedProvince);
             String address = "http://guolin.tech/api/china/"+ provinceCode + "/" +cityCode;
             queryFromServer(address, "county");
-            Log.d(TAG,"result queryCounties():" );
+            Log.d(TAG,"服务器 result queryCounties(): provinceCode: " +provinceCode+" cityCode:"+cityCode);
         }
     }
 
@@ -205,11 +214,8 @@ public class ChooseAreaFragment extends Fragment {
      * 根据传入的地址和类型从服务器上查询省市县数据
      */
     private void queryFromServer(String address, final String type) {
-
         showProgressDialog();
-
         HttpUtil.sendOkHttpRequest(address, new Callback() {
-
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 String responseText = response.body().string();

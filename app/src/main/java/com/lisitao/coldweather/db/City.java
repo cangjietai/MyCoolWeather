@@ -1,6 +1,5 @@
 package com.lisitao.coldweather.db;
 
-import org.litepal.LitePal;
 import org.litepal.crud.DataSupport;
 
 /**
@@ -42,5 +41,15 @@ public class City extends DataSupport {
 
     public void setProvinceId(int provinceId) {
         this.provinceId = provinceId;
+    }
+
+    @Override
+    public String toString() {
+        return "City{" +
+                "id=" + id +
+                ", cityName='" + cityName + '\'' +
+                ", cityCode=" + cityCode +
+                ", provinceId=" + provinceId +
+                '}';
     }
 }

@@ -165,7 +165,7 @@ public class ChooseAreaFragment extends Fragment {
         titleText.setText(selectedProvince.getProvinceName());
         backButton.setVisibility(View.VISIBLE);
         cityList = DataSupport.where("provinceId = ?",String.valueOf(selectedProvince.getId())).find(City.class);
-        Log.d(TAG,"result cityList: " +cityList);
+        Log.d(TAG,"result cityList: " + cityList);
         if (cityList.size() > 0) {
             dataList.clear();
             for (City city : cityList) {
@@ -189,7 +189,7 @@ public class ChooseAreaFragment extends Fragment {
         titleText.setText(selectedCity.getCityName());
         backButton.setVisibility(View.VISIBLE);
         countyList = DataSupport.where("cityId = ?",String.valueOf(selectedCity.getId())).find(County.class);
-        Log.d(TAG,"result countyList.size: " + DataSupport.where("cityId = ?",String.valueOf(selectedCity.getId())).find(County.class));
+        Log.d(TAG,"result countyList.size: " + countyList.size());
         if (countyList.size() > 0) {
             dataList.clear();
             for (County county : countyList) {
@@ -201,12 +201,11 @@ public class ChooseAreaFragment extends Fragment {
             Log.d(TAG,"数据库 currentLevel: " +currentLevel);
         } else {
             int provinceCode = selectedProvince.getProvinceCode();
-//            selectedCity.setCityCode(10);
             int cityCode = selectedCity.getCityCode();
-            Log.d(TAG,"服务器 result cityCode: "+cityCode + " selectedCity:" + selectedCity + " selectedProvince" + selectedProvince);
-            String address = "http://guolin.tech/api/china/"+ provinceCode + "/" +cityCode;
+            Log.d(TAG,"服务器 result cityCode: "+ cityCode + " selectedCity:" + selectedCity + " selectedProvince" + selectedProvince);
+            String address = "http://guolin.tech/api/china/"+ provinceCode + "/" + cityCode;
             queryFromServer(address, "county");
-            Log.d(TAG,"服务器 result queryCounties(): provinceCode: " +provinceCode+" cityCode:"+cityCode);
+            Log.d(TAG,"服务器 result queryCounties(): provinceCode: " + provinceCode +" cityCode:"+ cityCode);
         }
     }
 

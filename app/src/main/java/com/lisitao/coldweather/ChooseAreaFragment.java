@@ -21,6 +21,7 @@ import com.lisitao.coldweather.db.City;
 import com.lisitao.coldweather.db.County;
 import com.lisitao.coldweather.db.Province;
 import com.lisitao.coldweather.util.HttpUtil;
+import com.lisitao.coldweather.util.LogUtil;
 import com.lisitao.coldweather.util.Utility;
 
 
@@ -112,6 +113,7 @@ public class ChooseAreaFragment extends Fragment {
                 if (currentLevel == LEVEL_PROVINCE) {
                     selectedProvince = provinceList.get(position);
                     Log.d(TAG,"result selectedProvince: "+selectedProvince);
+                    LogUtil.getInstance().i(TAG,"result selectedProvince:" + selectedProvince);
                     queryCities();
                 } else if (currentLevel == LEVEL_CITY) {
                     selectedCity = cityList.get(position);
